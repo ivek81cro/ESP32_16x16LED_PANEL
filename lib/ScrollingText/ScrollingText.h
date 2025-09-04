@@ -5,6 +5,7 @@
 #include <ctype.h>
 #include "MatrixMapping.h"
 #include "SimpleFont5x7.h"
+#include <TextBitmap.h>
 
 class ScrollingText {
  public:

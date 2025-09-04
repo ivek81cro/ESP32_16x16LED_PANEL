@@ -47,26 +47,6 @@ void ScrollingText::step() {
 }
 
 void ScrollingText::rebuildBitmap() {
-  // Compute total width (each glyph 5 cols + 1 space) scaled
-  bmpWidth = max<uint16_t>(1, text.length() ? (text.length()*6*fontScale - fontScale) : 1);
-  bitmap.assign(fontScale * 7 * bmpWidth, 0);
-  uint16_t cursor = 0;
-  for (size_t i = 0; i < text.length(); i++) {
-    const uint8_t* glyph = glyph5x7(toupper(text[i]));
-    for (int col = 0; col < 5; col++) {
-      for (uint8_t sx = 0; sx < fontScale; sx++) {
-        if (cursor + col*fontScale + sx >= bmpWidth) break;
-        uint8_t bits = glyph[col];
-        for (int row = 0; row < 7; row++) {
-          for (uint8_t sy = 0; sy < fontScale; sy++) {
-            if (bits & (1 << row)) {
-              bitmap[(row*fontScale + sy) * bmpWidth + (cursor + col*fontScale + sx)] = 1;
-            }
-          }
-        }
-      }
-    }
-    cursor += 6 * fontScale; // 5*scale + 1*scale space
-  }
+  buildTextBitmap(text, fontScale, bitmap, bmpWidth);
   offsetX = MATRIX_WIDTH;
 }

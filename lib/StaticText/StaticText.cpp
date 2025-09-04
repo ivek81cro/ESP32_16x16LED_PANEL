@@ -1,28 +1,7 @@
 #include "StaticText.h"
 
 void StaticText::rebuild() {
-  const size_t len = text.length();
-  bmpWidth = len ? (len * 6 * fontScale - fontScale) : 1;
-  const uint16_t bmpHeight = fontScale * 7;
-  bitmap.assign(bmpWidth * bmpHeight, 0);
-  uint16_t cursor = 0;
-  for (size_t i = 0; i < len; i++) {
-    const uint8_t* glyph = glyph5x7(toupper(text[i]));
-    for (int col = 0; col < 5; col++) {
-      for (uint8_t sx = 0; sx < fontScale; sx++) {
-        if (cursor + col * fontScale + sx >= bmpWidth) break;
-        uint8_t bits = glyph[col];
-        for (int row = 0; row < 7; row++) {
-          for (uint8_t sy = 0; sy < fontScale; sy++) {
-            if (bits & (1 << row)) {
-              bitmap[(row * fontScale + sy) * bmpWidth + (cursor + col * fontScale + sx)] = 1;
-            }
-          }
-        }
-      }
-    }
-    cursor += 6 * fontScale;
-  }
+  buildTextBitmap(text, fontScale, bitmap, bmpWidth);
   dirty = false;
 }
 
