@@ -7,17 +7,23 @@
 #include "SimpleFont5x7.h"
 #include <TextBitmap.h>
 
+/**
+ * @class ScrollingText
+ * @brief Horizontalno pomiče tekst kroz matricu; svaki frame briše display i iscrtava vidljivi prozor.
+ * Upotreba:
+ *   ScrollingText sc(strip); sc.setText("HELLO"); u loop(): sc.step();
+ */
 class ScrollingText {
  public:
   explicit ScrollingText(Adafruit_NeoPixel &strip);
 
-  void setText(const String &text);
-  void setColor(uint8_t r, uint8_t g, uint8_t b);
-  void setSpeed(uint16_t ms);
-  void setFontScale(uint8_t scale);
+  void setText(const String &text);          // Postavi novi tekst i rebuild bitmap.
+  void setColor(uint8_t r, uint8_t g, uint8_t b); // RGB boja teksta.
+  void setSpeed(uint16_t ms);                // Kašnjenje (ms) između pomaka 1 px.
+  void setFontScale(uint8_t scale);          // Skaliranje fonta (>=1).
 
-  void reset();
-  void step();
+  void reset(); // Vrati offset na start (desno izvan ekrana).
+  void step();  // Pozivati u loop(); radi vremensko upravljanje i pomak.
 
  private:
   Adafruit_NeoPixel &strip;

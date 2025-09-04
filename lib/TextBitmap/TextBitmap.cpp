@@ -10,7 +10,7 @@ void buildTextBitmap(const String &text, uint8_t fontScale, std::vector<uint8_t>
   outBitmap.assign(outWidth * height, 0);
   uint16_t cursor = 0;
   for (size_t i = 0; i < len; i++) {
-    const uint8_t *glyph = glyph5x7(toupper(text[i]));
+  const uint8_t *glyph = glyph5x7(toupper(text[i])); // 5 stupaca, bit0 = top pixel
     for (int col = 0; col < 5; col++) {
       for (uint8_t sx = 0; sx < fontScale; sx++) {
         uint16_t tx = cursor + col * fontScale + sx;

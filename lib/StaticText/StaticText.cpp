@@ -1,7 +1,7 @@
 #include "StaticText.h"
 
 void StaticText::rebuild() {
-  buildTextBitmap(text, fontScale, bitmap, bmpWidth);
+  buildTextBitmap(text, fontScale, bitmap, bmpWidth); // Generiraj bitmap teksta.
   dirty = false;
 }
 
@@ -14,7 +14,7 @@ void StaticText::draw(bool clear) {
       }
     }
   }
-  int x0 = centered ? (int)((MATRIX_WIDTH - bmpWidth) / 2) : originX;
+  int x0 = centered ? (int)((MATRIX_WIDTH - bmpWidth) / 2) : originX; // Lijevi gornji kut cilja
   int y0 = centered ? (int)((MATRIX_HEIGHT - bmpHeight) / 2) : originY;
   for (uint16_t y = 0; y < bmpHeight; y++) {
     int dy = y0 + (int)y;
@@ -48,7 +48,7 @@ void StaticText::drawDiff() {
   if (!prevValid) {
     draw(false);
   } else {
-    // Erase pixels that were on but are now off
+  // 1) Ugasi piksele koji su prije bili upaljeni, a sada su izvan novog opsega ili su isključeni
     for (uint16_t y = 0; y < prevH; y++) {
       int dy = prevY0 + (int)y;
       if (dy < 0 || dy >= MATRIX_HEIGHT) continue;
@@ -68,7 +68,7 @@ void StaticText::drawDiff() {
         }
       }
     }
-    // Draw pixels that are on now
+  // 2) Upali nove piksele koji prije nisu bili aktivni
     for (uint16_t y = 0; y < bmpHeight; y++) {
       int dy = y0 + (int)y;
       if (dy < 0 || dy >= MATRIX_HEIGHT) continue;

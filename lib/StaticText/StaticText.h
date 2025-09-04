@@ -8,22 +8,27 @@
 #include "SimpleFont5x7.h"
 #include <TextBitmap.h>
 
+/**
+ * @class StaticText
+ * @brief Iscrtavanje statičnog (ili povremenog ažuriranog) teksta, s opcijom diff renderinga
+ *        (antiFlicker) za smanjivanje treperenja – pali/gasi samo promijenjene piksele.
+ */
 class StaticText {
 public:
   explicit StaticText(Adafruit_NeoPixel &strip) : strip(strip) {}
 
-  void setText(const String &t) { text = t; dirty = true; }
-  void setFontScale(uint8_t s) { fontScale = s < 1 ? 1 : s; dirty = true; }
-  void setColor(uint8_t r, uint8_t g, uint8_t b) { color = strip.Color(r, g, b); }
-  void setCentered(bool c) { centered = c; }
-  void setOrigin(int16_t x, int16_t y) { originX = x; originY = y; centered = false; }
-  void setAntiFlicker(bool on) { antiFlicker = on; }
+  void setText(const String &t) { text = t; dirty = true; }            // Postavi tekst (mark dirty).
+  void setFontScale(uint8_t s) { fontScale = s < 1 ? 1 : s; dirty = true; } // Skaliranje fonta.
+  void setColor(uint8_t r, uint8_t g, uint8_t b) { color = strip.Color(r, g, b); } // Boja.
+  void setCentered(bool c) { centered = c; }                            // Centriraj na matrici.
+  void setOrigin(int16_t x, int16_t y) { originX = x; originY = y; centered = false; } // Fiksna pozicija.
+  void setAntiFlicker(bool on) { antiFlicker = on; }                    // Uključi diff render.
 
   uint16_t width() const { return bmpWidth; }
   uint16_t height() const { return (uint16_t)(fontScale * 7); }
 
   // Render current text to the matrix; optionally clear first.
-  void render(bool clear = true);
+  void render(bool clear = true); // Iscrtavanje; clear=true briše pozadinu.
 
 private:
   Adafruit_NeoPixel &strip;
@@ -46,7 +51,7 @@ private:
   int16_t prevY0 = 0;
   bool prevValid = false;
 
-  void rebuild();
-  void draw(bool clear);
-  void drawDiff();
+  void rebuild();   // Izgradi bitmap ako je dirty.
+  void draw(bool clear); // Puno iscrtavanje.
+  void drawDiff();  // Diff iscrtavanje (anti-flicker).
 };

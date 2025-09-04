@@ -24,7 +24,7 @@ void ScrollingText::step() {
     }
   }
 
-  // Draw visible window of the bitmap at current offsetX
+  // Iscrtaj vidljivi prozor bitmape na trenutnom offsetX (dy je centriran vertikalno)
   for (uint16_t y = 0; y < fontScale * 7 && y < MATRIX_HEIGHT; y++) {
     int dy = (MATRIX_HEIGHT - fontScale * 7) / 2 + y; // vertically centered
     for (uint16_t x = 0; x < MATRIX_WIDTH; x++) {
@@ -47,6 +47,6 @@ void ScrollingText::step() {
 }
 
 void ScrollingText::rebuildBitmap() {
-  buildTextBitmap(text, fontScale, bitmap, bmpWidth);
-  offsetX = MATRIX_WIDTH;
+  buildTextBitmap(text, fontScale, bitmap, bmpWidth); // Regeneriraj cijelu traku teksta.
+  offsetX = MATRIX_WIDTH; // Resetiraj na početni položaj (izvan desnog ruba).
 }

@@ -1,31 +1,23 @@
 // Simple 16x16 LED matrix test: light pixels from index 0 to last
+/**
+ * @file main.cpp
+ * @brief Primjer: statički prikaz vremena (mm:ss:ms) na višepanelnoj NeoPixel matrici (serpentin mapping).
+ *
+ */
+
+#ifndef LED_PIN
+#define LED_PIN 21
+#endif
+
+#ifndef LED_BRIGHTNESS
+#define LED_BRIGHTNESS 255
+#endif
+
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
-#include "MatrixMapping.h"
+#include "MatrixMapping.h" // koristi prethodno definirane makroe
 #include "ScrollingText.h"
 #include "StaticText.h"
-
-
-// You can override these via -D flags in platformio.ini if needed
-#ifndef LED_PIN
-#define LED_PIN 21 // Default data pin; set to your actual LED data pin
-#endif
-
-// PANEL CONFIG: Change PANELS_X to add more 16x16 segments to the right
-#ifndef PANELS_X
-#define PANELS_X 3 // Broj panela horizontalno (npr. 2 = 32x16, 3 = 48x16)
-#endif
-#ifndef PANELS_Y
-#define PANELS_Y 1 // Broj panela vertikalno
-#endif
-
-#define PANEL_WIDTH 16
-#define PANEL_HEIGHT 16
-#define MATRIX_WIDTH (PANELS_X * PANEL_WIDTH)
-#define MATRIX_HEIGHT (PANELS_Y * PANEL_HEIGHT)
-#ifndef LED_BRIGHTNESS
-#define LED_BRIGHTNESS 255 // 0-255; keep low for safety when testing
-#endif
 
 #define NUM_PIXELS (MATRIX_WIDTH * MATRIX_HEIGHT)
 
@@ -33,7 +25,7 @@ Adafruit_NeoPixel strip(NUM_PIXELS, LED_PIN, NEO_GRB + NEO_KHZ800);
 ScrollingText scroller(strip);
 StaticText staticText(strip);
 
-// Using ScrollingText/MatrixMapping libs
+// Demo koristi StaticText (anti-flicker) za prikaz brojača vremena.
 
 void setup() {
   Serial.begin(115200);
@@ -51,7 +43,7 @@ void setup() {
 
   staticText.setText("00:00:000");
   staticText.setColor(255,0,0);
-  staticText.setFontScale(1); // 10x14
+  staticText.setFontScale(1); // Skaliranje fonta (1 => 5x7, 2 => 10x14 ...)
   staticText.setCentered(true);
   staticText.setAntiFlicker(true);
   staticText.render(true);
@@ -62,7 +54,7 @@ char timeStr[16];
 
 void loop() {
   unsigned long now = millis();
-  // Update time string every 100ms
+  // Ažuriraj prikaz svakih 100 ms (differences only -> manji flicker)
   if (now - lastTimeUpdate > 100) {
     unsigned long ms = now % 1000;
     unsigned long totalSec = now / 1000;
