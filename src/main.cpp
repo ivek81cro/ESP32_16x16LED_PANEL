@@ -17,7 +17,7 @@
 #endif
 
 #ifndef LED_BRIGHTNESS
-#define LED_BRIGHTNESS 255
+#define LED_BRIGHTNESS 64
 #endif
 
 #define NUM_PIXELS (MATRIX_WIDTH * MATRIX_HEIGHT)
@@ -31,7 +31,7 @@ TextDisplayMode textDisplay(staticDisplay, scrollDisplay);
 
 unsigned long lastTimeUpdate = 0;
 char timeStr[16];
-bool useScroll = true; // promijeni na true za scroll prikaz
+bool showTimer = true; // promijeni na true za prikaz tajmera
 static int lastLen = 0;
 
 void setup() {
@@ -42,13 +42,14 @@ void setup() {
   strip.clear();
   strip.show();
   // Primjer: prikaz statičnog teksta
-  textDisplay.showText("Sljedeci natjecatelj: Zeljko Marinovic, 111", useScroll, 0, 255, 0, 2); // static prikaz
+  textDisplay.showText("next 111", false, 0, 255, 0, 1); // statični tekst
+  staticDisplay.setBlink(true, 500); // omogući blinkanje svakih 500ms
   // Primjer: prikaz scroll teksta
   // textDisplay.showText("HELLO WORLD", true, 255, 0, 0, 1); // scroll prikaz
 }
 void loop() {
   unsigned long now = millis();
-  if (!useScroll) {
+  if (showTimer) {
     if (now - lastTimeUpdate > 10) {
       unsigned long ms = now % 1000;
       unsigned long totalSec = now / 1000;
@@ -56,13 +57,13 @@ void loop() {
       unsigned long sec = totalSec % 60;
       snprintf(timeStr, sizeof(timeStr), "%02lu:%02lu:%03lu", min, sec, ms);
       int curLen = strlen(timeStr);
-      // Prikaz statičnog vremena
+      // Prikaz tajmera
       textDisplay.showText(timeStr, false, 0, 255, 0, 1);
       lastLen = curLen;
       lastTimeUpdate = now;
     }
   } else {
-    // Prikaz scroll teksta
+    // Prikaz statičnog teksta (ili scroll)
     textDisplay.loop();
   }
 }
