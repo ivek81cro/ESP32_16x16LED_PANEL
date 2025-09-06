@@ -25,11 +25,13 @@
 Adafruit_NeoPixel strip(NUM_PIXELS, LED_PIN, NEO_GRB + NEO_KHZ800);
 ScrollingText scroller(strip);
 StaticText staticText(strip);
-TextDisplayMode textDisplay(staticText, scroller);
+StaticTextDisplay staticDisplay(staticText);
+ScrollingTextDisplay scrollDisplay(scroller);
+TextDisplayMode textDisplay(staticDisplay, scrollDisplay);
 
 unsigned long lastTimeUpdate = 0;
 char timeStr[16];
-bool useScroll = false; // promijeni na true za scroll prikaz
+bool useScroll = true; // promijeni na true za scroll prikaz
 static int lastLen = 0;
 
 void setup() {
