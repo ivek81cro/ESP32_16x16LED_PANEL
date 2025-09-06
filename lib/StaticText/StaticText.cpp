@@ -32,6 +32,10 @@ void StaticText::draw(bool clear) {
 
 void StaticText::render(bool clear) {
   if (dirty) rebuild();
+  // Automatski centriraj tekst prema širini bitmapa
+  if (centered) {
+    originX = (MATRIX_WIDTH - bmpWidth) / 2;
+  }
   if (antiFlicker && !clear) {
     drawDiff();
   } else {

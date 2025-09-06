@@ -42,7 +42,7 @@ void setup() {
   strip.show();
 
   staticText.setText("00:00:000");
-  staticText.setColor(255,0,0);
+  staticText.setColor(0,255,0);
   staticText.setFontScale(1); // Skaliranje fonta (1 => 5x7, 2 => 10x14 ...)
   staticText.setCentered(true);
   staticText.setAntiFlicker(true);
@@ -55,7 +55,7 @@ char timeStr[16];
 void loop() {
   unsigned long now = millis();
   // Ažuriraj prikaz svakih 100 ms (differences only -> manji flicker)
-  if (now - lastTimeUpdate > 100) {
+  if (now - lastTimeUpdate > 10) {
     unsigned long ms = now % 1000;
     unsigned long totalSec = now / 1000;
     unsigned long min = totalSec / 60;
